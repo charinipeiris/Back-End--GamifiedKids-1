@@ -381,7 +381,9 @@ router.get("/getdetails/:username", async (req, res) => {
             totalMarks : user.totalMarks,
             completed_games : user.completed_games,
             mL1 : user.mL1,
-            mL2: user.mL2
+            mL2: user.mL2,
+            sL1: user.sL1,
+            sL2 : user.sL2
         })
             res.status(200).json(student);
         } else {
@@ -442,6 +444,7 @@ router.get("/getcompletedgames/:username", async (req, res) => {
                                 final_array.marks = obj.marks;
                                 final_array.time_spent = obj.time_spent;                 
                                 final.push(final_array);
+
 
                             //    if (i == (games.length-1)){
                             //     res.status(200).json(final);
@@ -665,6 +668,14 @@ try{
                     user.mL2 = 1;
                     user.save();
                 }
+                else if (column == 3){
+                    user.sL1 = 1;
+                    user.save();
+                }
+                else if (column == 4){
+                    user.sL2 = 1;
+                    user.save();
+                }
                 
             }
           });
@@ -697,4 +708,102 @@ router.get("/getstudentuname/:studentname", async (req, res) => {
     }
 });
 
+
+router.get("/getcompletedgamesmaths/:username", async (req, res) => {
+    try {
+      
+        const id = req.params.username;
+        const user = await User.findOne({ username: id });
+       
+        if (user) {
+            var games = [];
+            var final = [];
+            user.completed_games.forEach((obj, i) => {
+                var array = {};
+                array.game_id = obj.game_id;
+                array.marks = obj.marks;
+                array.time_spent = obj.time_spent;
+                array.subject_id = obj.subject_id;
+                games.push(array);
+                // console.log(games);
+            });
+            for (const obj of games){
+            // games.forEach(async (obj, i) => {
+                    const game = await Game.findOne({ game_id: obj.game_id });
+                    if (game) {
+                    if ((game.subject_id)=="s01"){
+                        var final_array = {}
+                        final_array.game_id = obj.game_id;
+                        final_array.game_name = game.game_name;
+                        final_array.subject_id = game.subject_id;
+                        final_array.level = game.level_id;
+                        final_array.marks = obj.marks;
+                        final_array.time_spent = obj.time_spent;                 
+                        final.push(final_array);
+                    }
+                }
+                         
+            }
+ 
+               
+            // console.log(final);
+            res.status(200).json(final);
+
+            
+        } else {
+            res.status(404).json({ message: "No valid entry found" });
+        }
+    } catch (err) {
+        res.status(500).json({ message: err });
+    }
+});
+
+router.get("/getcompletedgamessinhala/:username", async (req, res) => {
+    try {
+      
+        const id = req.params.username;
+        const user = await User.findOne({ username: id });
+       
+        if (user) {
+            var games = [];
+            var final = [];
+            user.completed_games.forEach((obj, i) => {
+                var array = {};
+                array.game_id = obj.game_id;
+                array.marks = obj.marks;
+                array.time_spent = obj.time_spent;
+                array.subject_id = obj.subject_id;
+                games.push(array);
+                // console.log(games);
+            });
+            for (const obj of games){
+            // games.forEach(async (obj, i) => {
+                    const game = await Game.findOne({ game_id: obj.game_id });
+                    if (game) {
+                    if ((game.subject_id)=="s02"){
+                        var final_array = {}
+                        final_array.game_id = obj.game_id;
+                        final_array.game_name = game.game_name;
+                        final_array.subject_id = game.subject_id;
+                        final_array.level = game.level_id;
+                        final_array.marks = obj.marks;
+                        final_array.time_spent = obj.time_spent;                 
+                        final.push(final_array);
+                    }
+                }
+                         
+            }
+ 
+               
+            // console.log(final);
+            res.status(200).json(final);
+
+            
+        } else {
+            res.status(404).json({ message: "No valid entry found" });
+        }
+    } catch (err) {
+        res.status(500).json({ message: err });
+    }
+});
 module.exports = router;

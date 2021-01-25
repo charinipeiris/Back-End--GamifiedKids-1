@@ -676,6 +676,14 @@ try{
                     user.sL2 = 1;
                     user.save();
                 }
+                else if (column == 5){
+                    user.eL1 = 1;
+                    user.save();
+                }
+                else if (column == 6){
+                    user.eL2 = 1;
+                    user.save();
+                }
                 
             }
           });

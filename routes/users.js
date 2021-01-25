@@ -806,4 +806,53 @@ router.get("/getcompletedgamessinhala/:username", async (req, res) => {
         res.status(500).json({ message: err });
     }
 });
+
+router.get("/getcompletedgamesenv/:username", async (req, res) => {
+    try {
+      
+        const id = req.params.username;
+        const user = await User.findOne({ username: id });
+       
+        if (user) {
+            var games = [];
+            var final = [];
+            user.completed_games.forEach((obj, i) => {
+                var array = {};
+                array.game_id = obj.game_id;
+                array.marks = obj.marks;
+                array.time_spent = obj.time_spent;
+                array.subject_id = obj.subject_id;
+                games.push(array);
+                // console.log(games);
+            });
+            for (const obj of games){
+            // games.forEach(async (obj, i) => {
+                    const game = await Game.findOne({ game_id: obj.game_id });
+                    if (game) {
+                    if ((game.subject_id)=="s03"){
+                        var final_array = {}
+                        final_array.game_id = obj.game_id;
+                        final_array.game_name = game.game_name;
+                        final_array.subject_id = game.subject_id;
+                        final_array.level = game.level_id;
+                        final_array.marks = obj.marks;
+                        final_array.time_spent = obj.time_spent;                 
+                        final.push(final_array);
+                    }
+                }
+                         
+            }
+ 
+               
+            // console.log(final);
+            res.status(200).json(final);
+
+            
+        } else {
+            res.status(404).json({ message: "No valid entry found" });
+        }
+    } catch (err) {
+        res.status(500).json({ message: err });
+    }
+});
 module.exports = router;

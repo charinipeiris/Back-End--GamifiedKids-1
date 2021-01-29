@@ -383,7 +383,9 @@ router.get("/getdetails/:username", async (req, res) => {
             mL1 : user.mL1,
             mL2: user.mL2,
             sL1: user.sL1,
-            sL2 : user.sL2
+            sL2 : user.sL2,
+            eL1: user.eL1,
+            eL2 : user.eL2,
         })
             res.status(200).json(student);
         } else {
